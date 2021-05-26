@@ -9,6 +9,10 @@ def create_app():
     app.register_blueprint(smart.bp)
     app.register_blueprint(ups.bp)
 
+    app.config.from_mapping(
+            HD_DEVICES = ['sd'+x for x in 'bcde']
+            )
+
 
     return app
 
