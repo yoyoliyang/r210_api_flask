@@ -10,7 +10,7 @@ def create_app():
     app.register_blueprint(ups.bp)
 
     app.config.from_mapping(
-            HD_DEVICES = ['sd'+x for x in 'bcde']
+            HD_DEVICES = ['sd'+x for x in 'abcd']
             )
 
 

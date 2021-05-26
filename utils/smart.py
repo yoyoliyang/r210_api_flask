@@ -18,13 +18,13 @@ def check_hd_path():
     for device in current_app.config['HD_DEVICES']:
         if not os.path.exists('/dev/' + device):
             msg[device] = 'not found'
-    return jsonify(msg)
 
 
 @bp.route('/<device_name>')
 def get_hd_info(device_name):
     # get hardisk information to html
-    with os.popen(f'/sbin/smartctl --all {quote(device_name)}') as f:
+    device = quote('/dev/{}'.format(device_name))
+    with os.popen(f'/sbin/smartctl --all {device}') as f:
         return f'<pre>{f.read()}</pre>'
 
 @bp.route("/ps")
@@ -38,11 +38,11 @@ def get_hdd_ps():
         ps['uptime'] = uptime
 
         for device in current_app.config['HD_DEVICES']:
-                cmd = f'/sbin/smartctl -i -n standby /dev/sd{device}'
+                cmd = f'/sbin/smartctl -i -n standby /dev/{device}'
                 pow_sts = os.popen(cmd).readlines()[-1].strip()
                 if 'STANDBY' in pow_sts:
-                        ps[f'sd{device}']= 'STANDBY'
+                        ps[device]= 'STANDBY'
                 else:
-                        ps[f'sd{device}']= 'ACTIVE'
+                        ps[device]= 'ACTIVE'
 
         return jsonify(ps)
